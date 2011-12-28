@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.contrib.gis.db import models
 
 class Region(models.Model):
@@ -21,7 +22,7 @@ class Departement(models.Model):
                                  blank=True, srid=settings.EPSG_PROJECTION)
     centroid = models.PointField(verbose_name=u"Centroïde", null=True,
                                  blank=True, srid=settings.EPSG_PROJECTION)
-    limite = models.MultiPolygonField(verbose_name=_(u"Limite"),
+    limite = models.MultiPolygonField(verbose_name=u"Limite",
                                       srid=settings.EPSG_PROJECTION)
     objects = models.GeoManager()
 
@@ -37,7 +38,7 @@ class Arrondissement(models.Model):
                                  blank=True, srid=settings.EPSG_PROJECTION)
     centroid = models.PointField(verbose_name=u"Centroïde", null=True,
                                  blank=True, srid=settings.EPSG_PROJECTION)
-    limite = models.MultiPolygonField(verbose_name=_(u"Limite"),
+    limite = models.MultiPolygonField(verbose_name=u"Limite",
                                       srid=settings.EPSG_PROJECTION)
     objects = models.GeoManager()
 
@@ -53,7 +54,7 @@ class Canton(models.Model):
                                  blank=True, srid=settings.EPSG_PROJECTION)
     centroid = models.PointField(verbose_name=u"Centroïde", null=True,
                                  blank=True, srid=settings.EPSG_PROJECTION)
-    limite = models.MultiPolygonField(verbose_name=_(u"Limite"),
+    limite = models.MultiPolygonField(verbose_name=u"Limite",
                                       srid=settings.EPSG_PROJECTION)
     arrondissement = models.ForeignKey("Arrondissement", null=True, blank=True)
     objects = models.GeoManager()
@@ -87,10 +88,8 @@ class Commune(models.Model):
                                      blank=True)
     population = models.IntegerField(verbose_name=u"Population", null=True,
                                      blank=True)
-    code_cant = models.CharField(verbose_name=u"Code canton", null=True,
-                                 blank=True, max_length=2)
-    code_arr = models.CharField(verbose_name=u"Code arrondissement", null=True,
-                                blank=True, max_length=1)
+    limite = models.MultiPolygonField(verbose_name=u"Limite",
+                                      srid=settings.EPSG_PROJECTION)
     canton = models.ForeignKey("Canton", null=True, blank=True)
     arrondissement = models.ForeignKey("Arrondissement", null=True, blank=True)
     departement = models.ForeignKey("Departement", null=True, blank=True)
