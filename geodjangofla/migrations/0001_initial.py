@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'Departement'
         db.create_table('geodjangofla_departement', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('id_geofla', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
             ('code_dept', self.gf('django.db.models.fields.CharField')(max_length=2)),
             ('nom_dept', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('code_chf', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
@@ -31,7 +31,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'Arrondissement'
         db.create_table('geodjangofla_arrondissement', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('id_geofla', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
             ('departement', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geodjangofla.Departement'], null=True, blank=True)),
             ('code_arr', self.gf('django.db.models.fields.CharField')(max_length=1)),
             ('code_chf', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
@@ -44,7 +44,7 @@ class Migration(SchemaMigration):
 
         # Adding model 'Canton'
         db.create_table('geodjangofla_canton', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('id_geofla', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
             ('departement', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geodjangofla.Departement'], null=True, blank=True)),
             ('code_cant', self.gf('django.db.models.fields.CharField')(max_length=2)),
             ('code_chf', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
@@ -102,7 +102,7 @@ class Migration(SchemaMigration):
             'code_arr': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'code_chf': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
             'departement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geodjangofla.Departement']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'id_geofla': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'limite': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
             'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})
         },
@@ -114,7 +114,7 @@ class Migration(SchemaMigration):
             'code_cant': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
             'code_chf': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
             'departement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geodjangofla.Departement']", 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'id_geofla': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'limite': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
             'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})
         },
@@ -141,7 +141,7 @@ class Migration(SchemaMigration):
             'chf_lieu': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
             'code_chf': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
             'code_dept': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'id_geofla': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'limite': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {}),
             'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'nom_dept': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})

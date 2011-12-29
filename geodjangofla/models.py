@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django.conf import settings
+from geodjangofla import settings
 from django.contrib.gis.db import models
+
+class GEOFLAManager:
+    EQUI = {}
+    @classmethod
+    def import_from_dbf(cls, **values):
+        print values
+    
 
 class Region(models.Model):
     code_reg = models.CharField(verbose_name=u"Code région", null=True,
@@ -10,7 +17,10 @@ class Region(models.Model):
     nom_region = models.CharField(verbose_name=u"Nom", null=True, blank=True,
                                 max_length=30)
 
-class Departement(models.Model):
+class Departement(models.Model, GEOFLAManager):
+    #EQUI = {'ID_GEOFLA':, 'CODE_DEPT', 'NOM_DEPT', 'CODE_CHF', 'NOM_CHF', 'X_CHF_LIEU', 'Y_CHF_LIEU', 'X_CENTROID', 'Y_CENTROID', 'CODE_REG', 'NOM_REGION'}
+    
+    id_geofla = models.IntegerField(primary_key=True)
     code_dept = models.CharField(verbose_name=u"Code département", max_length=2)
     nom_dept = models.CharField(verbose_name=u"Nom", null=True, blank=True,
                                 max_length=30)
@@ -27,6 +37,7 @@ class Departement(models.Model):
     objects = models.GeoManager()
 
 class Arrondissement(models.Model):
+    id_geofla = models.IntegerField(primary_key=True)
     departement = models.ForeignKey("Departement", null=True, blank=True)
     code_arr = models.CharField(verbose_name=u"Code arrondissement",
                                 max_length=1)
@@ -43,6 +54,7 @@ class Arrondissement(models.Model):
     objects = models.GeoManager()
 
 class Canton(models.Model):
+    id_geofla = models.IntegerField(primary_key=True)
     departement = models.ForeignKey("Departement", null=True, blank=True)
     code_cant = models.CharField(verbose_name=u"Code arrondissement",
                                 max_length=2)
