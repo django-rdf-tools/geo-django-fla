@@ -59,7 +59,7 @@ class GEOFLAFieldManager:
     def to_unicode(self, value):
         if not value:
             return ""
-        return unicode(value.strip())
+        return unicode(value)
 
     def to_point(self, value):
         assert(len(value) == 2)
@@ -100,7 +100,8 @@ class GEOFLAFieldManager:
         for k, lbl in self.choices:
             if lbl == value:
                 return k
-        raise ValueError("%s is not referenced" %value)
+        print "*%s*" % value
+        raise ValueError(u"%s is not referenced" % value)
 
 GFFM = GEOFLAFieldManager
 
@@ -208,11 +209,12 @@ class Canton(models.Model, GEOFLAManager):
     objects = models.GeoManager()
 
 STATUT_COMMUNE = (
-  ('CE', u"Capitale d'État"),
+  ('CE', u"Capitale d'état"),
+  ('PF', u"Préfecture"),
   ('PR', u"Préfecture de région"),
   ('PD', u"Préfecture de département"),
-  ('SP', u"Sous préfecture"),
-  ('CC', u"Chef-lieu de canton"),
+  ('SP', u"Sous-préfecture"),
+  ('CC', u"Chef-lieu canton"),
   ('CS', u"Commune simple"),
 )
 

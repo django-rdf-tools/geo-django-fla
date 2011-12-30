@@ -4,12 +4,13 @@
 import os
 from optparse import make_option
 
+from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.gdal import DataSource
 from django.core.management.base import BaseCommand, CommandError
 
+from geodjangofla import settings
 from geodjangofla import models
 from geodjangofla.utils import dbf
-from geodjangofla import settings
-
 
 class Command(BaseCommand):
     args = '<geofla_path>'
@@ -28,12 +29,35 @@ class Command(BaseCommand):
             raise CommandError("The given GEOFLA directory structure is not "\
                                "correct")
         # import dbf datas
-        for file_name, cls_name in settings.GEOFLA_FILES[1:]:
+        for file_name, cls_name in settings.GEOFLA_FILES:
             f = open(os.sep.join([path, file_name+'.DBF']))
+            model = getattr(models, cls_name)
+            self.stdout.write('%ss :\n' % (cls_name))
             for idx, values in enumerate(dbf.reader(f)):
-                print values
-                if idx > 3:
-                    raise
-        """
-            self.stdout.write('Successfully closed poll "%s"\n' % poll_id)
-        """
+                if idx == 0:
+                    if values != model.GEOFLA_DBF_FIELDS:
+                        msg = 'Cannot import. The DBF format has changed for '
+                        msg += '%s.\n\n' % cls_name
+                        msg += '* known :\t%s\n' % str(model.GEOFLA_DBF_FIELDS)
+                        msg += '* current :\t%s\n' % str(values)
+                        raise CommandError(msg)
+                    continue
+                if idx == 1:
+                    # pass the definition line
+                    continue
+                converted_values = []
+                for val in values:
+                    if type(val) == str:
+                        val = unicode(val, settings.DBF_ENCODING).strip()
+                    converted_values.append(val)
+                model.create_or_update_from_GEOFLA_dict(
+                           dict(zip(model.GEOFLA_DBF_FIELDS, converted_values)))
+                self.stdout.write('* Data : %d\r' % (idx - 2))
+            ds = DataSource(os.sep.join([path, file_name+'.SHP']))
+            for idx, feat in enumerate(ds[0]):
+                o = model.objects.get(id_geofla=feat.get('ID_GEOFLA'))
+                o.limite = GEOSGeometry(feat.geom.wkt, srid=settings.GEOFLA_EPSG)
+                o.save()
+                self.stdout.write('*Shape : %d\r' % (idx))
+            self.stdout.write('\n')
+        self.stdout.write('All DBF data imported - importing boundaries\n')

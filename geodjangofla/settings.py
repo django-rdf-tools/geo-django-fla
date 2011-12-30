@@ -6,5 +6,6 @@ GEOFLA_EPSG = 2154 # RGF93 / Lambert-93
 GEOFLA_FILES = (('DEPARTEMENTS/DEPARTEMENT', 'Departement'),
                 ('ARRONDISSEMENTS/ARRONDISSEMENT', 'Arrondissement'),
                 ('CANTONS/CANTON', 'Canton'),
-                ('COMMUNES/COMMUNE', 'Communes'))
+                ('COMMUNES/COMMUNE', 'Commune'))
+DBF_ENCODING = 'iso-8859-15'
 
