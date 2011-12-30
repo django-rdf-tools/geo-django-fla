@@ -59,7 +59,7 @@ class GEOFLAFieldManager:
     def to_unicode(self, value):
         if not value:
             return ""
-        return unicode(value)
+        return unicode(value.strip())
 
     def to_point(self, value):
         assert(len(value) == 2)
@@ -137,7 +137,7 @@ class Departement(models.Model, GEOFLAManager):
     code_chf = models.CharField(verbose_name=u"Code du chef lieu", null=True,
                                 blank=True, max_length=3)
     nom_chf = models.CharField(verbose_name=u"Nom de la préfecture", null=True,
-                               blank=True, max_length=30)
+                               blank=True, max_length=50)
     chf_lieu = models.PointField(verbose_name=u"Chef lieu", null=True,
                                  blank=True, srid=settings.EPSG)
     centroid = models.PointField(verbose_name=u"Centroïde", null=True,
@@ -167,7 +167,7 @@ class Arrondissement(models.Model, GEOFLAManager):
     code_chf = models.CharField(verbose_name=u"Code du chef lieu", null=True,
                                 blank=True, max_length=3)
     nom_chf = models.CharField(verbose_name=u"Nom de la préfecture", null=True,
-                               blank=True, max_length=30)
+                               blank=True, max_length=50)
     chf_lieu = models.PointField(verbose_name=u"Chef lieu", null=True,
                                  blank=True, srid=settings.EPSG)
     centroid = models.PointField(verbose_name=u"Centroïde", null=True,
@@ -197,7 +197,7 @@ class Canton(models.Model, GEOFLAManager):
     code_chf = models.CharField(verbose_name=u"Code du chef lieu", null=True,
                                 blank=True, max_length=3)
     nom_chf = models.CharField(verbose_name=u"Nom de la préfecture", null=True,
-                               blank=True, max_length=30)
+                               blank=True, max_length=50)
     chf_lieu = models.PointField(verbose_name=u"Chef lieu", null=True,
                                  blank=True, srid=settings.EPSG)
     centroid = models.PointField(verbose_name=u"Centroïde", null=True,

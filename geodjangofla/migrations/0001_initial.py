@@ -22,7 +22,7 @@ class Migration(SchemaMigration):
             ('code_dept', self.gf('django.db.models.fields.CharField')(max_length=2)),
             ('nom_dept', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('code_chf', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
-            ('nom_chf', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('nom_chf', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('chf_lieu', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True, blank=True)),
             ('centroid', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True, blank=True)),
             ('limite', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')(null=True, blank=True)),
@@ -36,7 +36,7 @@ class Migration(SchemaMigration):
             ('departement', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geodjangofla.Departement'], null=True, blank=True)),
             ('code_arr', self.gf('django.db.models.fields.CharField')(max_length=1)),
             ('code_chf', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
-            ('nom_chf', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('nom_chf', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('chf_lieu', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True, blank=True)),
             ('centroid', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True, blank=True)),
             ('limite', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')(null=True, blank=True)),
@@ -49,7 +49,7 @@ class Migration(SchemaMigration):
             ('departement', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geodjangofla.Departement'], null=True, blank=True)),
             ('code_cant', self.gf('django.db.models.fields.CharField')(max_length=2)),
             ('code_chf', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
-            ('nom_chf', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('nom_chf', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('chf_lieu', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True, blank=True)),
             ('centroid', self.gf('django.contrib.gis.db.models.fields.PointField')(null=True, blank=True)),
             ('limite', self.gf('django.contrib.gis.db.models.fields.MultiPolygonField')(null=True, blank=True)),
@@ -103,7 +103,7 @@ class Migration(SchemaMigration):
             'departement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geodjangofla.Departement']", 'null': 'True', 'blank': 'True'}),
             'id_geofla': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'limite': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'null': 'True', 'blank': 'True'}),
-            'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})
+            'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         },
         'geodjangofla.canton': {
             'Meta': {'object_name': 'Canton'},
@@ -115,7 +115,7 @@ class Migration(SchemaMigration):
             'departement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geodjangofla.Departement']", 'null': 'True', 'blank': 'True'}),
             'id_geofla': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'limite': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'null': 'True', 'blank': 'True'}),
-            'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})
+            'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         },
         'geodjangofla.commune': {
             'Meta': {'object_name': 'Commune'},
@@ -140,7 +140,7 @@ class Migration(SchemaMigration):
             'code_dept': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
             'id_geofla': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'limite': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'null': 'True', 'blank': 'True'}),
-            'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'nom_dept': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'region': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geodjangofla.Region']", 'null': 'True', 'blank': 'True'})
         },
