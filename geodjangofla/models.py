@@ -256,7 +256,5 @@ class Commune(models.Model, GEOFLAManager):
     limite = models.MultiPolygonField(verbose_name=u"Limite", null=True,
                                  blank=True, srid=settings.EPSG)
     canton = models.ForeignKey("Canton", null=True, blank=True)
-    arrondissement = models.ForeignKey("Arrondissement", null=True, blank=True)
-    departement = models.ForeignKey("Departement", null=True, blank=True)
     objects = models.GeoManager()
 
