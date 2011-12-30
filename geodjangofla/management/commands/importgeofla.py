@@ -32,7 +32,7 @@ class Command(BaseCommand):
         for file_name, cls_name in settings.GEOFLA_FILES:
             f = open(os.sep.join([path, file_name+'.DBF']))
             model = getattr(models, cls_name)
-            self.stdout.write('%ss :\n' % (cls_name))
+            self.stdout.write('* %ss :\n' % (cls_name))
             for idx, values in enumerate(dbf.reader(f)):
                 if idx == 0:
                     if values != model.GEOFLA_DBF_FIELDS:
@@ -52,12 +52,16 @@ class Command(BaseCommand):
                     converted_values.append(val)
                 model.create_or_update_from_GEOFLA_dict(
                            dict(zip(model.GEOFLA_DBF_FIELDS, converted_values)))
-                self.stdout.write('* Data : %d\r' % (idx - 2))
+                self.stdout.write('\t- Data : %d\r' % (idx - 2))
+            self.stdout.write('\n')
             ds = DataSource(os.sep.join([path, file_name+'.SHP']))
             for idx, feat in enumerate(ds[0]):
                 o = model.objects.get(id_geofla=feat.get('ID_GEOFLA'))
-                o.limite = GEOSGeometry(feat.geom.wkt, srid=settings.GEOFLA_EPSG)
+                wkt = feat.geom.wkt
+                if wkt.startswith('POLYGON '):
+                    wkt = 'MULTIPOLYGON (' + wkt[len('POLYGON '):] + ')'
+                o.limite = 'SRID=%d;' % settings.GEOFLA_EPSG + wkt
                 o.save()
-                self.stdout.write('*Shape : %d\r' % (idx))
-            self.stdout.write('\n')
-        self.stdout.write('All DBF data imported - importing boundaries\n')
+                self.stdout.write('\t- Shape : %d\r' % (idx))
+            self.stdout.write('\n\n')
+        self.stdout.write('Import done\n')
