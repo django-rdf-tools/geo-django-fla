@@ -74,13 +74,26 @@ class GEOFLAFieldManager:
         return self.instance_class.create_or_update_from_GEOFLA_dict(dct)
 
     def get_instance(self, value):
-        assert(len(self.geofla_name) == len(value))
         dct = {}
-        geo_fla_dct = dict([(field.geofla_name, field.attr_name)
-                        for field in self.instance_class.GEOFLAFIELDS
-                         if type(field.geofla_name) not in (list, tuple)])
+        geo_fla_dct = dict([(field.geofla_name, field)
+                        for field in self.instance_class.GEOFLAFIELDS])
+        last_keys, last_vals = [], [] # regroup keys in a tuple when not
+                                      # available
         for key, val in zip(self.geofla_name, value):
-            dct[geo_fla_dct[key]] = val
+            last_keys += [key]
+            last_vals += [val]
+            if len(last_keys) > 1:
+                key = tuple(last_keys)
+            if key not in geo_fla_dct:
+                continue
+            if type(key) == tuple:
+                val = dict(zip(key, last_vals))
+            else:
+                val = {key:val}
+            # convert the data getting appropriate value for the filter
+            val = geo_fla_dct[key].convert(val)
+            dct[geo_fla_dct[key].attr_name] = val
+            last_keys, last_vals = [], []
         return self.instance_class.objects.get(**dct)
 
     def to_choice(self, value):
@@ -174,8 +187,8 @@ class Canton(models.Model, GEOFLAManager):
             GFFM('NOM_CHF', 'nom_chf', 'to_unicode'),
             GFFM(('X_CHF_LIEU', 'Y_CHF_LIEU'), 'chf_lieu', 'to_point'),
             GFFM(('X_CENTROID', 'Y_CENTROID'), 'centroid', 'to_point'),
-            GFFM(('CODE_ARR',), 'arrondissement', 'get_instance',
-                                            instance_class=Arrondissement)]
+            GFFM(('CODE_ARR', 'CODE_DEPT', 'NOM_DEPT'), 'arrondissement',
+                            'get_instance', instance_class=Arrondissement)]
 
     id_geofla = models.IntegerField(primary_key=True)
     departement = models.ForeignKey("Departement", null=True, blank=True)
@@ -212,19 +225,15 @@ class Commune(models.Model, GEOFLAManager):
             GFFM('ID_GEOFLA', 'id_geofla', int),
             GFFM('CODE_COMM', 'code_comm', 'to_unicode'),
             GFFM('INSEE_COM', 'insee_com', 'to_unicode'),
-            GFFM('NOM_COMM', 'nom_com', 'to_unicode'),
+            GFFM('NOM_COMM', 'nom_comm', 'to_unicode'),
             GFFM('STATUT', 'statut', 'to_choice', choices=STATUT_COMMUNE),
             GFFM(('X_CHF_LIEU', 'Y_CHF_LIEU'), 'chf_lieu', 'to_point'),
             GFFM(('X_CENTROID', 'Y_CENTROID'), 'centroid', 'to_point'),
             GFFM('Z_MOYEN', 'z_moyen', int),
             GFFM('SUPERFICIE', 'superficie', int),
             GFFM('POPULATION', 'population', float),
-            GFFM(('CODE_CANT',), 'canton', 'get_instance',
-                                            instance_class=Canton),
-            GFFM(('CODE_ARR',), 'arrondissement', 'get_instance',
-                                            instance_class=Arrondissement),
-            GFFM(('CODE_DEPT',), 'departement', 'get_instance',
-                                            instance_class=Departement)]
+            GFFM(('CODE_CANT', 'CODE_ARR', 'CODE_DEPT', 'NOM_DEPT'), 'canton',
+                                    'get_instance', instance_class=Canton),]
     id_geofla = models.IntegerField(primary_key=True)
     code_comm = models.CharField(verbose_name=u"Code commune", null=True,
                                  blank=True, max_length=3)
