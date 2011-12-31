@@ -1,4 +1,4 @@
-## licence PSF
+## Work distributed under PSF licence
 ## Created by Raymond Hettinger on Tue, 11 Jan 2005 (PSF)
 ## {{{ http://code.activestate.com/recipes/362715/ (r7)
 import struct, datetime, decimal, itertools

@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# This code is free software; you can redistribute it and/or modify it
+# under the terms of the BSD License (see the file COPYING included with
+# the distribution).
+
 from decimal import Decimal
 
 from django.test import TestCase

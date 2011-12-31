@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# This code is free software; you can redistribute it and/or modify it
+# under the terms of the BSD License (see the file COPYING included with
+# the distribution).
+
+
 from geodjangofla import settings
 
 from django.contrib.gis.db import models
