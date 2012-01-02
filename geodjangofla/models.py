@@ -121,6 +121,8 @@ class Region(models.Model, GEOFLAManager):
                                  blank=True, max_length=2)
     nom_region = models.CharField(verbose_name=u"Nom", null=True, blank=True,
                                 max_length=30)
+    def __unicode__(self):
+        return u" - ".join([unicode(self.code_arr), unicode(self.departement)])
 
 class Departement(models.Model, GEOFLAManager):
     GEOFLA_DBF_FIELDS = ['ID_GEOFLA','CODE_DEPT','NOM_DEPT','CODE_CHF',
@@ -153,6 +155,9 @@ class Departement(models.Model, GEOFLAManager):
     region = models.ForeignKey("Region", null=True, blank=True)
     objects = models.GeoManager()
 
+    def __unicode__(self):
+        return u"%s (%s)" % (self.nom_dept, self.code_dept)
+
 class Arrondissement(models.Model, GEOFLAManager):
     GEOFLA_DBF_FIELDS = ['ID_GEOFLA','CODE_ARR','CODE_CHF','NOM_CHF',
          'X_CHF_LIEU','Y_CHF_LIEU','X_CENTROID','Y_CENTROID','CODE_DEPT',
@@ -182,6 +187,10 @@ class Arrondissement(models.Model, GEOFLAManager):
                                  blank=True, srid=settings.EPSG)
     objects = models.GeoManager()
 
+    def __unicode__(self):
+        return u"Arrondissement %s - %s" % (unicode(self.code_arr),
+                                            unicode(self.departement))
+
 class Canton(models.Model, GEOFLAManager):
     GEOFLA_DBF_FIELDS = ['ID_GEOFLA','CODE_CANT','CODE_CHF','NOM_CHF',
          'X_CHF_LIEU','Y_CHF_LIEU','X_CENTROID','Y_CENTROID','CODE_ARR',
@@ -197,9 +206,7 @@ class Canton(models.Model, GEOFLAManager):
                             'get_instance', instance_class=Arrondissement)]
 
     id_geofla = models.IntegerField(primary_key=True)
-    departement = models.ForeignKey("Departement", null=True, blank=True)
-    code_cant = models.CharField(verbose_name=u"Code arrondissement",
-                                max_length=2)
+    code_cant = models.CharField(verbose_name=u"Code canton", max_length=2)
     code_chf = models.CharField(verbose_name=u"Code du chef lieu", null=True,
                                 blank=True, max_length=3)
     nom_chf = models.CharField(verbose_name=u"Nom de la préfecture", null=True,
@@ -212,6 +219,13 @@ class Canton(models.Model, GEOFLAManager):
                                  blank=True, srid=settings.EPSG)
     arrondissement = models.ForeignKey("Arrondissement", null=True, blank=True)
     objects = models.GeoManager()
+
+    class Meta:
+        ordering = ('arrondissement', 'code_cant')
+
+    def __unicode__(self):
+        return u"Canton %s - %s" % (self.code_cant,
+                                    unicode(self.arrondissement))
 
 STATUT_COMMUNE = (
   ('CE', u"Capitale d'état"),
@@ -265,3 +279,5 @@ class Commune(models.Model, GEOFLAManager):
     canton = models.ForeignKey("Canton", null=True, blank=True)
     objects = models.GeoManager()
 
+    def __unicode__(self):
+        return self.nom_comm

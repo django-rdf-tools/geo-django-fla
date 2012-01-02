@@ -46,7 +46,6 @@ class Migration(SchemaMigration):
         # Adding model 'Canton'
         db.create_table('geodjangofla_canton', (
             ('id_geofla', self.gf('django.db.models.fields.IntegerField')(primary_key=True)),
-            ('departement', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geodjangofla.Departement'], null=True, blank=True)),
             ('code_cant', self.gf('django.db.models.fields.CharField')(max_length=2)),
             ('code_chf', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
             ('nom_chf', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
@@ -106,13 +105,12 @@ class Migration(SchemaMigration):
             'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         },
         'geodjangofla.canton': {
-            'Meta': {'object_name': 'Canton'},
+            'Meta': {'ordering': "('arrondissement', 'code_cant')", 'object_name': 'Canton'},
             'arrondissement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geodjangofla.Arrondissement']", 'null': 'True', 'blank': 'True'}),
             'centroid': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
             'chf_lieu': ('django.contrib.gis.db.models.fields.PointField', [], {'null': 'True', 'blank': 'True'}),
             'code_cant': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
             'code_chf': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
-            'departement': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['geodjangofla.Departement']", 'null': 'True', 'blank': 'True'}),
             'id_geofla': ('django.db.models.fields.IntegerField', [], {'primary_key': 'True'}),
             'limite': ('django.contrib.gis.db.models.fields.MultiPolygonField', [], {'null': 'True', 'blank': 'True'}),
             'nom_chf': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
