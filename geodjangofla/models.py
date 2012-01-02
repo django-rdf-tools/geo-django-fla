@@ -121,8 +121,12 @@ class Region(models.Model, GEOFLAManager):
                                  blank=True, max_length=2)
     nom_region = models.CharField(verbose_name=u"Nom", null=True, blank=True,
                                 max_length=30)
+
+    class Meta:
+        ordering = ('nom_region',)
+
     def __unicode__(self):
-        return u" - ".join([unicode(self.code_arr), unicode(self.departement)])
+        return u"%s (%s)" % (self.nom_region, self.code_reg)
 
 class Departement(models.Model, GEOFLAManager):
     GEOFLA_DBF_FIELDS = ['ID_GEOFLA','CODE_DEPT','NOM_DEPT','CODE_CHF',
@@ -155,6 +159,9 @@ class Departement(models.Model, GEOFLAManager):
     region = models.ForeignKey("Region", null=True, blank=True)
     objects = models.GeoManager()
 
+    class Meta:
+        ordering = ('nom_dept',)
+
     def __unicode__(self):
         return u"%s (%s)" % (self.nom_dept, self.code_dept)
 
@@ -186,6 +193,9 @@ class Arrondissement(models.Model, GEOFLAManager):
     limite = models.MultiPolygonField(verbose_name=u"Limite", null=True,
                                  blank=True, srid=settings.EPSG)
     objects = models.GeoManager()
+
+    class Meta:
+        ordering = ('departement', 'code_arr')
 
     def __unicode__(self):
         return u"Arrondissement %s - %s" % (unicode(self.code_arr),
