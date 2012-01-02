@@ -23,13 +23,22 @@ This code is free software; you can redistribute it and/or modify it
 under the terms of the BSD License (see the file COPYING included with
 the distribution).
 
+Requirements
+************
+  - Django (>=1.2);
+
+  - Django-south (>=0.7.3);
+
+  - Postgresql (>=8) with its geographic extension PostGIS (>=1.4);
+
+  - PROJ.4.
+
 
 Usage
 *****
 
- - Install the requirements of this application using pip and the requirements
-   file or by your prefered mean (sources or packages). It requires Django
-   (>=1.2), django-south (>=0.7.3) and postgresql with geographic extensions.
+ - Install the requirements of this application (a requirement file is provided
+   for python dependencies) by your prefered mean (pip, sources or packages).
 
  - Create a new Django project or go to an existing project you want to include
    this application into. Add 'south' and 'geodjangofla' to INSTALLED_APPS in
