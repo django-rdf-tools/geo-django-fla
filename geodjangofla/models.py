@@ -9,7 +9,7 @@
 from geodjangofla import settings
 
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, GEOSGeometry
 from django.core.exceptions import ObjectDoesNotExist
 
 class GEOFLAManager:
@@ -68,8 +68,10 @@ class GEOFLAFieldManager:
 
     def to_point(self, value):
         assert(len(value) == 2)
-        pt = Point(value[0], value[1], srid=settings.GEOFLA_EPSG)
-        return pt
+        # convert from hectometer to meter
+        wkt = 'SRID=%d;POINT (%s00 %s00)' % (settings.GEOFLA_EPSG, value[0],
+                                          value[1])
+        return wkt
 
     def to_instance(self, value):
         assert(len(self.geofla_name) == len(value))
