@@ -29,8 +29,8 @@ setup(
     license='BSD',
     long_description=read('README.rst'),
     zip_safe=False,
-    install_requires = ['Django==1.2',
-                        'south==0.7.3',],
+    install_requires = ['Django>=1.2',
+                        'south>=0.7.3',],
 )
 
 
