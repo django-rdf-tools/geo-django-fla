@@ -62,4 +62,9 @@ Why not using a "simple" shp2pg?
 
  - and you get all the benefit of having a ready to serve django application.
 
+Funding
+*******
+
+geodjangofla development was funded by `CREDIS <http://credis.org/>`_, FSE
+(European Social Fund) and Conseil Regional d'Auvergne.
 
