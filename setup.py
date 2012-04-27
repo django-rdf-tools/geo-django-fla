@@ -22,7 +22,8 @@ setup(
     packages=['geodjangofla',
               'geodjangofla.management',
               'geodjangofla.management.commands',
-              'geodjangofla.migrations'
+              'geodjangofla.migrations',
+	      'geodjangofla.utils',
               ],
     author=u'Étienne Loks',
     author_email='etienne.loks@peacefrogs.net',
