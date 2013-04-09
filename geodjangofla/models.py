@@ -263,9 +263,9 @@ class Commune(models.Model, GEOFLAManager):
             GFFM(('X_CENTROID', 'Y_CENTROID'), 'centroid', 'to_point'),
             GFFM('Z_MOYEN', 'z_moyen', int),
             GFFM('SUPERFICIE', 'superficie', int),
-            GFFM('POPULATION', 'population', float),
-            GFFM(('CODE_CANT', 'CODE_ARR', 'CODE_DEPT', 'NOM_DEPT'), 'canton',
-                                    'get_instance', instance_class=Canton),]
+            GFFM('POPULATION', 'population', float),]
+    #GFFM(('CODE_CANT', 'CODE_ARR', 'CODE_DEPT', 'NOM_DEPT'), 'canton',
+    #                                'get_instance', instance_class=Canton),]
     id_geofla = models.IntegerField(primary_key=True)
     code_comm = models.CharField(verbose_name=u"Code commune", null=True,
                                  blank=True, max_length=3)
@@ -287,7 +287,7 @@ class Commune(models.Model, GEOFLAManager):
                                    null=True, blank=True)
     limite = models.MultiPolygonField(verbose_name=u"Limite", null=True,
                                  blank=True, srid=settings.EPSG)
-    canton = models.ForeignKey("Canton", null=True, blank=True)
+    #canton = models.ForeignKey("Canton", null=True, blank=True)
     objects = models.GeoManager()
 
     def __unicode__(self):

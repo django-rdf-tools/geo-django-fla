@@ -7,5 +7,6 @@ GEOFLA_FILES = (('DEPARTEMENTS/DEPARTEMENT', 'Departement'),
                 ('ARRONDISSEMENTS/ARRONDISSEMENT', 'Arrondissement'),
                 ('CANTONS/CANTON', 'Canton'),
                 ('COMMUNES/COMMUNE', 'Commune'))
+GEOFLA_FILES = (('COMMUNES/COMMUNE', 'Commune'),)
 DBF_ENCODING = 'iso-8859-15'
 

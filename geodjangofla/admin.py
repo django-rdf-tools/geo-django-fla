@@ -36,11 +36,12 @@ class CantonAdmin(admin.OSMGeoAdmin):
     list_filter = ['arrondissement__departement']
 admin.site.register(models.Canton, CantonAdmin)
 
+"""
 class CommuneAdmin(admin.OSMGeoAdmin):
     model = models.Commune
     search_fields = ['nom_comm', 'insee_com']
-    list_display = ['nom_comm', 'insee_com', 'statut', 'canton']
-    ordering = ['nom_comm', 'canton']
-    list_filter = ['statut', 'canton__arrondissement__departement']
+    list_display = ['nom_comm', 'insee_com', 'statut'] # , 'canton']
+    ordering = ['nom_comm'] # , 'canton']
+    list_filter = ['statut'] # , 'canton__arrondissement__departement']
 admin.site.register(models.Commune, CommuneAdmin)
-
+"""

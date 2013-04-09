@@ -37,8 +37,7 @@ Usage
    or set the python path to include the dir in your django project.
 
  - Download the GEOFLA(R) Communes archive (available `here
-   <http://professionnels.ign.fr/ficheProduitCMS.do?idDoc=6185461>`_ on december
-   2011)
+   <http://professionnels.ign.fr/geofla>`_)
 
  - Extract the archive on a temporary path.
 
