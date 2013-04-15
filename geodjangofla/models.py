@@ -32,7 +32,7 @@ class GEOFLAManager:
 
 class GEOFLAFieldManager:
     def __init__(self, geofla_name, attr_name, conv, instance_class=None,
-                 choices=[],lax=False):
+                 choices=[], lax=False):
         self.geofla_name, self.attr_name = geofla_name, attr_name
         self.lax, self.instance_class = lax, instance_class
         if callable(conv):
