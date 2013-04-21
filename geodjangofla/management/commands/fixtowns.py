@@ -30,5 +30,7 @@ class Command(BaseCommand):
                 commune.delete()
                 continue
             commune.nom_comm = "-".join(items[0:-2])
+            if commune.nom_comm.endswith('-'):
+                commune.nom_comm = commune.nom_comm[:-1]
             commune.save()
         self.stdout.write('Regroup done\n')
