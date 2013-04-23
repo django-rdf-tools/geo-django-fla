@@ -11,6 +11,7 @@ from optparse import make_option
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.gdal import DataSource
 from django.core.management.base import BaseCommand, CommandError
+from django.core.exceptions import ObjectDoesNotExist
 
 from geodjangofla import settings
 from geodjangofla import models
@@ -24,17 +25,20 @@ class Command(BaseCommand):
         if not args:
             raise CommandError("No GEOFLA directory provided")
         path = os.path.realpath(args[0])
-        try:
-            assert(os.path.isdir(path))
-            for file_name, cls_name in settings.GEOFLA_FILES:
-                for ext in ['.SHP', '.DBF']:
-                    assert(os.path.isfile(os.sep.join([path, file_name + ext])))
-        except AssertionError:
+        data_present = False
+        for file_name, cls_name in settings.GEOFLA_FILES:
+            for ext in ['.SHP', '.DBF']:
+                if os.path.isfile(os.sep.join([path, file_name + ext])):
+                    data_present = True
+        if not data_present:
             raise CommandError("The given GEOFLA directory structure is not "\
                                "correct")
         # import dbf datas
         for file_name, cls_name in settings.GEOFLA_FILES:
-            f = open(os.sep.join([path, file_name+'.DBF']))
+            try:
+                f = open(os.sep.join([path, file_name+'.DBF']))
+            except IOError:
+                continue
             model = getattr(models, cls_name)
             self.stdout.write('* %ss :\n' % (cls_name))
             for idx, values in enumerate(dbf.reader(f)):
@@ -60,7 +64,10 @@ class Command(BaseCommand):
             self.stdout.write('\n')
             ds = DataSource(os.sep.join([path, file_name+'.SHP']))
             for idx, feat in enumerate(ds[0]):
-                o = model.objects.get(id_geofla=feat.get('ID_GEOFLA'))
+                try:
+                    o = model.objects.get(id_geofla=feat.get('ID_GEOFLA'))
+                except ObjectDoesNotExist:
+                    continue
                 wkt = feat.geom.wkt
                 if wkt.startswith('POLYGON '):
                     wkt = 'MULTIPOLYGON (' + wkt[len('POLYGON '):] + ')'
