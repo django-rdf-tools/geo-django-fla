@@ -16,10 +16,29 @@ class GEOFLAManager:
     GEOFLA_DBF_FIELDS = []
 
     @classmethod
-    def create_or_update_from_GEOFLA_dict(cls, values):
+    def create_or_update_from_GEOFLA_dict(cls, values, departements=None):
         dct = {}
         for field_manager in cls.GEOFLAFIELDS:
             dct[field_manager.attr_name] = field_manager.convert(values)
+            if departements and dct[field_manager.attr_name]:
+                # commune
+                if field_manager.attr_name == 'insee_com' and \
+                   dct[field_manager.attr_name][0:2] not in departements:
+                    return
+                # departement
+                if field_manager.attr_name == 'code_dept' and \
+                   dct[field_manager.attr_name] not in departements:
+                    return
+                # arrondissement
+                if field_manager.attr_name == 'departement' and \
+                   dct[field_manager.attr_name].code_dept not in departements:
+                    return
+                # canton
+                if field_manager.attr_name == 'arrondissement' and \
+                   dct[field_manager.attr_name].departement and \
+                   dct[field_manager.attr_name].departement.code_dept \
+                                                          not in departements:
+                    return
         try:
             instance = cls.objects.get(id_geofla=dct['id_geofla'])
             dct.pop('id_geofla')

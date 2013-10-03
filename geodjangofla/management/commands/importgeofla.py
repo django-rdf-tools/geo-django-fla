@@ -20,10 +20,23 @@ from geodjangofla.utils import dbf
 class Command(BaseCommand):
     args = '<geofla_path>'
     help = 'Import des donnees geofla en base de donnees'
+    option_list = BaseCommand.option_list + (
+        make_option('-d', '--departements',
+            action='store',
+            type='string',
+            dest='departements',
+            default=None,
+            help='Liste de départements à importer séparée par une virgule. Si'\
+                 'cette liste n\'est pas précisée, on importe tous les '\
+                 'départements.'),
+        )
 
     def handle(self, *args, **options):
         if not args:
             raise CommandError("No GEOFLA directory provided")
+        departements = []
+        if options['departements']:
+            departements = options['departements'].split(',')
         path = os.path.realpath(args[0])
         data_present = False
         for file_name, cls_name in settings.GEOFLA_FILES:
@@ -41,6 +54,7 @@ class Command(BaseCommand):
                 continue
             model = getattr(models, cls_name)
             self.stdout.write('* %ss :\n' % (cls_name))
+            imported = 0
             for idx, values in enumerate(dbf.reader(f)):
                 if idx == 0:
                     if values != model.GEOFLA_DBF_FIELDS:
@@ -58,10 +72,14 @@ class Command(BaseCommand):
                     if type(val) == str:
                         val = unicode(val, settings.DBF_ENCODING).strip()
                     converted_values.append(val)
-                model.create_or_update_from_GEOFLA_dict(
-                           dict(zip(model.GEOFLA_DBF_FIELDS, converted_values)))
-                self.stdout.write('\t- Data : %d\r' % (idx - 2))
+                m = model.create_or_update_from_GEOFLA_dict(
+                           dict(zip(model.GEOFLA_DBF_FIELDS, converted_values)),
+                           departements=options['departements'])
+                if m:
+                    imported += 1
+                    self.stdout.write('\t- Data : %d\r' % imported)
             self.stdout.write('\n')
+            imported = 0
             ds = DataSource(os.sep.join([path, file_name+'.SHP']))
             for idx, feat in enumerate(ds[0]):
                 try:
@@ -73,6 +91,7 @@ class Command(BaseCommand):
                     wkt = 'MULTIPOLYGON (' + wkt[len('POLYGON '):] + ')'
                 o.limite = 'SRID=%d;' % settings.GEOFLA_EPSG + wkt
                 o.save()
-                self.stdout.write('\t- Shape : %d\r' % (idx))
+                imported += 1
+                self.stdout.write('\t- Shape : %d\r' % imported)
             self.stdout.write('\n\n')
         self.stdout.write('Import done\n')
