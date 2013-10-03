@@ -20,17 +20,30 @@ class Command(BaseCommand):
     help = 'Regroupe les arrondissements en une seule commune'
 
     def handle(self, *args, **options):
+        limits = {}
         for commune in models.Commune.objects.filter(
                         nom_comm__endswith='-ARRONDISSEMENT').all():
             items = commune.nom_comm.split('--')
             if len(items) < 3:
                 items = commune.nom_comm.split('-')
             nb_ardt = items[-2]
+            nom_comm = "-".join(items[0:-2])
+            if nom_comm.endswith('-'):
+                nom_comm = nom_comm[:-1]
+            key = (nom_comm, commune.insee_com[0:2])
+            if key not in limits:
+                limits[key] = commune.limite
+            else:
+                limits[key] = limits[key].union(commune.limite)
             if nb_ardt[0:2] != '1E':
                 commune.delete()
                 continue
-            commune.nom_comm = "-".join(items[0:-2])
-            if commune.nom_comm.endswith('-'):
-                commune.nom_comm = commune.nom_comm[:-1]
+            commune.nom_comm = nom_comm
             commune.save()
+        for nom_comm, dpt in limits:
+            print nom_comm, dpt
+            com = models.Commune.objects.get(nom_comm__startswith=nom_comm,
+                                                 insee_com__startswith=dpt)
+            com.limite = limits[(nom_comm, dpt)]
+            com.save()
         self.stdout.write('Regroup done\n')
