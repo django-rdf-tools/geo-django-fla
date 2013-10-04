@@ -7,6 +7,7 @@
 
 import os
 from optparse import make_option
+from django.contrib.gis.geos import MultiPolygon
 
 from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.gdal import DataSource
@@ -41,9 +42,11 @@ class Command(BaseCommand):
             commune.nom_comm = nom_comm
             commune.save()
         for nom_comm, dpt in limits:
-            print nom_comm, dpt
             com = models.Commune.objects.get(nom_comm__startswith=nom_comm,
                                                  insee_com__startswith=dpt)
-            com.limite = limits[(nom_comm, dpt)]
+            new_limit = limits[(nom_comm, dpt)]
+            if new_limit.geom_type == 'Polygon':
+                new_limit = MultiPolygon([new_limit])
+            com.limite = new_limit
             com.save()
         self.stdout.write('Regroup done\n')
