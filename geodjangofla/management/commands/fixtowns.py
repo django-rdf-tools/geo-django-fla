@@ -24,9 +24,8 @@ class Command(BaseCommand):
         limits = {}
         for commune in models.Commune.objects.filter(
                         nom_comm__endswith='-ARRONDISSEMENT').all():
-            items = commune.nom_comm.split('--')
-            if len(items) < 3:
-                items = commune.nom_comm.split('-')
+            items = commune.nom_comm.split('-')
+            items = [i for i in items if i]
             nb_ardt = items[-2]
             nom_comm = "-".join(items[0:-2])
             if nom_comm.endswith('-'):
